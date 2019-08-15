@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Google OAuth Login Demo App</title>
+  <link href='https://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet'>
+  <style>
+    body { font-family: 'ABeeZee'; }
+  </style>
+</head>
+
+<body>
+  <a id="link"><button>Login with Google</button></a>
+  <div id="user-info-wrapper">
+    <img width="50" />
+    <p></p><p></p><p></p>
+  </div>
+  <script type="text/javascript">
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('id')) {
+      document.querySelector('#link').style.display = 'none'
+      document.querySelector('img').src = urlParams.get('picture')
+      document.querySelectorAll('p')[0].innerHTML = `Hi, ${urlParams.get('given_name')}!`
+      document.querySelectorAll('p')[1].innerHTML = `Full name: ${urlParams.get('name')}`
+      document.querySelectorAll('p')[2].innerHTML = `Email: ${urlParams.get('email')}`
+    } else {
+      document.querySelector('#user-info-wrapper').style.display = 'none'
+    }
+
+
+    async function getClientId() {
+      const redirectUri = 'http://localhost:3000/oauth2callback'
+      const scope = 'profile email openid'
+      const responseType = 'code'
+
+      const response = await fetch('clientId')
+      const json = await response.json()
+      document.querySelector('#link').href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${json.clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=${responseType}&access_type=offline&include_granted_scopes=true`
+    }
+    getClientId()
+	</script>
+</body>
+</html>
