@@ -45,7 +45,6 @@ async function getUserInfo(accessToken) {
     }
   )
   const json = await response.json()
-  console.log(json)
   return json
 }
 
